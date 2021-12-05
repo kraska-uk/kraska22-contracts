@@ -1,0 +1,59 @@
+{
+  "name": "@kraska-uk/kraska22-contracts",
+  "version": "1.0.0",
+  "description": "KRASKA22 Smart Contracts",
+  "private": false,
+  "license": "MIT",
+  "author": {
+    "name": "KRASKA.UK",
+    "email": "support@kraska.uk",
+    "url": "https://kraska.uk"
+  },
+  "homepage": "https://github.com/kraska-uk/kraska22-contracts#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kraska-uk/kraska22-contracts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kraska-uk/kraska22-contracts/issues",
+    "email": "support@kraska.uk"
+  },
+  "keywords": [
+    "ethereum",
+    "nft"
+  ],
+  "files": [
+    "contracts",
+    "build"
+  ],
+  "scripts": {
+    "test": "truffle test",
+    "clean": "rimraf ./build/",
+    "precompile": "yarn clean",
+    "compile": "truffle compile",
+    "predeploy": "yarn run compile",
+    "deploy": "truffle migrations --network",
+    "verify": "truffle run verify --network"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2"
+  },
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^1.5.1",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
+    "ganache-cli": "^6.12.2",
+    "mkdirp": "^1.0.4",
+    "rimraf": "^3.0.2",
+    "truffle": "^5.4.17",
+    "truffle-assertions": "^0.9.2",
+    "truffle-plugin-verify": "^0.5.16"
+  },
+  "contributors": [
+    {
+      "name": "Aleksandr Ivannikov",
+      "email": "dev@an-ivannikov.com",
+      "url": "https://an-ivannikov.com/"
+    }
+  ]
+}
