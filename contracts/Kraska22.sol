@@ -17,6 +17,8 @@ contract ProxyRegistry {
 contract Kraska22 is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
     using Strings for uint256;
 
+    uint256 public constant MAX_SUPPLY = 400;
+
     string private _contractURI;
     string private _baseTokenURI;
     address private _proxyRegistry;
@@ -33,16 +35,27 @@ contract Kraska22 is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
         _proxyRegistry = proxyRegistry_;
     }
 
+    function safeMint(address to, uint256[] memory tokenIds)
+        external
+        onlyOwner
+    {
+        require(tokenIds.length > 0, "tokenIds not specified");
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            require(
+                tokenIds[i] < MAX_SUPPLY,
+                "tokenId must be less than MAX_SUPPLY"
+            );
+            _safeMint(to, tokenIds[i]);
+        }
+    }
+
+    // Metadata
     function contractURI() public view returns (string memory) {
         return _contractURI;
     }
 
     function setContractURI(string memory contractURI_) public onlyOwner {
         _contractURI = contractURI_;
-    }
-
-    function _baseURI() internal view override returns (string memory) {
-        return _baseTokenURI;
     }
 
     function baseTokenURI() public view returns (string memory) {
@@ -53,12 +66,18 @@ contract Kraska22 is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
         _baseTokenURI = baseTokenURI_;
     }
 
+    // OpenSea
     function setProxyRegistry(address proxyRegistry_) public onlyOwner {
         _proxyRegistry = proxyRegistry_;
     }
 
     function proxyRegistry() public view returns (address) {
         return _proxyRegistry;
+    }
+
+    // The following functions are overrides required by Solidity.
+    function _baseURI() internal view override returns (string memory) {
+        return _baseTokenURI;
     }
 
     function tokenURI(uint256 tokenId)
@@ -78,16 +97,6 @@ contract Kraska22 is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
             bytes(baseURI).length > 0
                 ? string(abi.encodePacked(baseURI, tokenId.toString(), ".json"))
                 : "";
-    }
-
-    function safeMint(address to, uint256[] memory tokenIds)
-        external
-        onlyOwner
-    {
-        require(tokenIds.length > 0, "tokenIds not specified");
-        for (uint256 i = 0; i < tokenIds.length; i++) {
-            _safeMint(to, tokenIds[i]);
-        }
     }
 
     function isApprovedForAll(address owner, address operator)
