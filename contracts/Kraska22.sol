@@ -19,18 +19,18 @@ contract Kraska22 is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
 
     string private _contractURI;
     string private _baseTokenURI;
-    address private _proxyRegistryAddress;
+    address private _proxyRegistry;
 
     constructor(
         string memory name_,
         string memory symbol_,
         string memory contractURI_,
         string memory baseTokenURI_,
-        address proxyRegistryAddress_
+        address proxyRegistry_
     ) ERC721(name_, symbol_) {
         _contractURI = contractURI_;
         _baseTokenURI = baseTokenURI_;
-        _proxyRegistryAddress = proxyRegistryAddress_;
+        _proxyRegistry = proxyRegistry_;
     }
 
     function contractURI() public view returns (string memory) {
@@ -53,15 +53,12 @@ contract Kraska22 is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
         _baseTokenURI = baseTokenURI_;
     }
 
-    function setProxyRegistryAddress(address proxyRegistryAddress_)
-        public
-        onlyOwner
-    {
-        _proxyRegistryAddress = proxyRegistryAddress_;
+    function setProxyRegistry(address proxyRegistry_) public onlyOwner {
+        _proxyRegistry = proxyRegistry_;
     }
 
-    function proxyRegistryAddress() public view returns (address) {
-        return _proxyRegistryAddress;
+    function proxyRegistry() public view returns (address) {
+        return _proxyRegistry;
     }
 
     function tokenURI(uint256 tokenId)
@@ -99,9 +96,13 @@ contract Kraska22 is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
         override
         returns (bool)
     {
-        ProxyRegistry proxyRegistry = ProxyRegistry(_proxyRegistryAddress);
-        if (address(proxyRegistry.proxies(owner)) == operator) {
-            return true;
+        if (_proxyRegistry != address(0)) {
+            if (
+                address(ProxyRegistry(_proxyRegistry).proxies(owner)) ==
+                operator
+            ) {
+                return true;
+            }
         }
 
         return super.isApprovedForAll(owner, operator);
