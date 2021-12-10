@@ -17,6 +17,15 @@ module.exports = {
   },
 
   networks: {
+    development: {
+      host: '127.0.0.1',
+      port: 8545,
+      network_id: '*',
+      gasPrice: 100000000000, // 100 gwei 
+      skipDryRun: true,
+      production: false,
+    },
+
     mainnet: {
       provider: () => new HDWalletProvider(
         process.env.MNEMONIC, `https://mainnet.infura.io/v3/${process.env.API_INFURA}`
